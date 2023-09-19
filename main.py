@@ -49,20 +49,46 @@ def quadratic_multiply(x, y):
     return _quadratic_multiply(x,y).decimal_val
 
 def _quadratic_multiply(x, y):
-    ### TODO
-    pass
+    if type(x) != type(BinaryNumber(5)) or type(y) != type(BinaryNumber(5)):
+        xvec = BinaryNumber(x).binary_vec
+        yvec = BinaryNumber(y).binary_vec
+    else:
+        xvec = x.binary_vec
+        yvec = y.binary_vec
+        x = x.decimal_val
+        y = y.decimal_val
+    xvec, yvec = pad(xvec,yvec)
+    n = len(xvec)
+    # print(n)
+    if x <= 1 and y <= 1:
+        return BinaryNumber(x*y)
+    else:
+        x_left, x_right = split_number(xvec)
+        y_left, y_right = split_number(yvec)
+    # print(xvec)
+    # print(yvec)
+    # print(y_left.binary_vec,y_right.binary_vec)
+    a = bit_shift(_quadratic_multiply(x_left.decimal_val,y_left.decimal_val),n)
+    b1 = _quadratic_multiply(x_left.decimal_val,y_right.decimal_val)
+    b2 = _quadratic_multiply(x_right.decimal_val,y_left.decimal_val)
+    bs = BinaryNumber(b1.decimal_val+b2.decimal_val)
+    b = bit_shift(bs,n//2)
+    c = _quadratic_multiply(x_right.decimal_val,y_right.decimal_val)
+    # print(a)
+    return(BinaryNumber(a.decimal_val+b.decimal_val+c.decimal_val))
+    # return bit_shift(quadratic_multiply(x_left,x_right), n) + bit_shift((quadratic_multiply(x_left,y_right)) + (quadratic_multiply(x_right*y_left)), n/2) + (quadratic_multiply(x_right, y_right))
+    # pass
     ###
 
-
-    
+print(quadratic_multiply(120,60))
+print(quadratic_multiply(10,10))
+print(quadratic_multiply(BinaryNumber(10),BinaryNumber(20)))
+print(quadratic_multiply(640,234))
     
 def test_quadratic_multiply(x, y, f):
     start = time.time()
-    # multiply two numbers x, y using function f
-    
+    f(x,y)
     return (time.time() - start)*1000
 
-
-    
     
 
